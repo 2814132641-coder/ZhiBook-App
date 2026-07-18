@@ -1,0 +1,35 @@
+appId: com.lightledger.app
+productName: 轻账
+electronDownload:
+  mirror: https://registry.npmmirror.com/-/binary/electron/
+copyright: Copyright © 2026
+directories:
+  buildResources: resources
+  output: release/${version}
+files:
+  - out/**/*
+  - package.json
+asarUnpack:
+  - resources/**
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: resources/icon.ico
+  signAndEditExecutable: false
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 轻账
+mac:
+  category: public.app-category.finance
+  target:
+    - dmg
+linux:
+  target:
+    - AppImage
+publish: null
