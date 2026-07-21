@@ -1,0 +1,42 @@
+{
+  "name": "@zhibook/shared",
+  "version": "0.1.0",
+  "description": "轻账共享业务包 · schema / utils / types / api-client",
+  "author": "you",
+  "license": "MIT",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "require": "./dist/api/index.js",
+      "default": "./dist/api/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "require": "./dist/schema/index.js",
+      "default": "./dist/schema/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/utils/index.js",
+      "default": "./dist/utils/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
+}

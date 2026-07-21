@@ -11,3 +11,7 @@ Thumbs.db
 *.tsbuildinfo
 # 项目本地配置（含每人不同的 Claude 状态）
 .claude/
+# 后端数据文件（本地 SQLite）
+packages/server/data/
+# 临时脚本
+packages/desktop/src/renderer/patch_api.py
