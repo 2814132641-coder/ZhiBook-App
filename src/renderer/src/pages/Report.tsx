@@ -44,12 +44,12 @@ export default function Report() {
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: true,
-          itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+          itemStyle: { borderRadius: 4, borderColor: 'var(--color-bg-surface)', borderWidth: 2 },
           label: { formatter: '{b}\n{d}%' },
           data: summary.byCategory.map((c) => ({
             name: c.categoryName,
             value: c.amount,
-            itemStyle: { color: c.categoryColor || '#2E7D5B' }
+            itemStyle: { color: c.categoryColor || 'var(--color-brand)' }
           }))
         }
       ]
@@ -74,7 +74,7 @@ export default function Report() {
           type: 'bar',
           data: top5.map((c) => ({
             value: c.amount,
-            itemStyle: { color: c.categoryColor || '#2E7D5B', borderRadius: [0, 4, 4, 0] }
+            itemStyle: { color: c.categoryColor || 'var(--color-brand)', borderRadius: [0, 4, 4, 0] }
           })),
           label: {
             show: true,
@@ -109,7 +109,7 @@ export default function Report() {
               value={summary?.total ?? 0}
               precision={2}
               prefix="¥"
-              valueStyle={{ color: '#2E7D5B' }}
+              valueStyle={{ color: 'var(--color-brand)' }}
             />
           </Col>
           <Col span={8}>

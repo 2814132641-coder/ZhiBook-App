@@ -21,7 +21,7 @@ interface Row {
   category_color?: string
 }
 
-function rowToRecord(r: Row): RecordItem {
+export function rowToRecord(r: Row): RecordItem {
   return {
     id: r.id,
     amount: r.amount,

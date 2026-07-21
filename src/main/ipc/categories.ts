@@ -2,7 +2,7 @@ import { ipcMain } from 'electron'
 import { getDb, persist } from '../db'
 import type { Category, CreateCategoryInput, UpdateCategoryInput } from '../../shared/types'
 
-function rowToCategory(row: Record<string, unknown>): Category {
+export function rowToCategory(row: Record<string, unknown>): Category {
   return {
     id: row.id as number,
     parentId: (row.parent_id as number | null) ?? null,

@@ -1,0 +1,129 @@
+/* ============================================================================
+ * 「轻账」设计系统 · 设计 Token（2026-07-18）
+ * 现代微质感 + 沉浸式体验 · 莫兰迪色系 + 低饱和功能色
+ *
+ * 用法：
+ *   - 配置 antd ConfigProvider：main.tsx 里 import './styles/tokens.ts' 用 tokens 对象
+ *   - CSS/内联 style：直接 var(--token-name)
+ *   - 改一处全局生效
+ *
+ * 可复制到 Figma：把下方 CSS 变量值复制为 Figma Variables
+ * 可复制到设计软件：颜色/圆角/阴影参数已经按 8pt 网格统一
+ * ========================================================================== */
+
+:root {
+  /* ============ 1. 品牌与核心色 ============ */
+  --color-brand: #006D5B;          /* 品牌主色 · 翡翠绿 · 主按钮 / 选中态 */
+  --color-brand-light: #E6F4F1;    /* 选中背景 / Tag 底色 */
+  --color-brand-dark: #004D40;     /* 悬停态 / 强调 */
+  --color-accent-gold: #D4A373;    /* 收入 / 资产点缀 */
+
+  /* ============ 2. 中性色阶 ============ */
+  --color-text-primary: #1D1D1F;   /* 主标题 · 金额 · 接近黑但更柔 */
+  --color-text-secondary: #86868B; /* 副标题 · 时间戳 · 未选中图标 */
+  --color-text-tertiary: #C7C7CC;  /* 占位符 · 分割线 */
+
+  --color-bg-canvas: #F7F8FA;      /* 全局背景（极淡冷灰）*/
+  --color-bg-surface: #FFFFFF;     /* 卡片背景 · 弹窗 */
+  --color-bg-elevated: #FFFFFF;    /* 悬浮元素背景 */
+
+  --color-border: #EBEDF0;         /* 默认边框 */
+  --color-divider: #F2F4F6;        /* 分隔线 */
+
+  /* ============ 3. 语义化分类色（莫兰迪色系，统一明度）============ */
+  --color-cat-food: #FF8C42;        /* 餐饮 · 温暖食欲 */
+  --color-cat-transport: #4A90E2;   /* 交通 · 冷静通行 */
+  --color-cat-shopping: #E056A0;    /* 购物 · 时尚活力 */
+  --color-cat-living: #7B61FF;      /* 居住 · 安稳居家 */
+  --color-cat-fun: #FFD93D;         /* 娱乐 · 快乐明亮 */
+  --color-cat-medical: #6BCB77;     /* 医疗 · 健康平和 */
+  --color-cat-education: #5B8DEF;    /* 教育 · 知识 · 稳重蓝 */
+  --color-cat-comm: #6E7B8B;        /* 通讯 · 中性蓝灰 */
+  --color-cat-finance: #B85042;     /* 金融 · 稳健赭红 */
+  --color-cat-other: #B8BCC8;       /* 其他 · 中性灰紫 */
+
+  /* ============ 4. 状态色（功能性）============ */
+  --color-success: #10B981;         /* 成功 · 提现 / 正向 */
+  --color-warning: #F59E0B;         /* 警告 · 接近上限 */
+  --color-danger: #EF4444;          /* 危险 · 删除 / 超支 */
+  --color-info: #3B82F6;            /* 信息 */
+
+  /* ============ 5. 阴影 · 有色悬浮（高级感关键）============ */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.05);   /* 卡片默认 */
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.12);
+
+  /* 有色投影 · 让阴影与卡片色融为一体（更通透）*/
+  --shadow-brand-sm: 0 4px 14px rgba(0, 109, 91, 0.18);
+  --shadow-brand-md: 0 8px 28px rgba(0, 109, 91, 0.28);
+
+  /* ============ 6. 圆角 · 8pt 网格 ============ */
+  --radius-xs: 8px;
+  --radius-sm: 12px;                /* 小元素：按钮 cell */
+  --radius-md: 16px;                /* 中元素：输入/Tag */
+  --radius-lg: 24px;                /* 大元素：卡片 */
+  --radius-xl: 32px;                /* 极大元素：弹窗 */
+  --radius-full: 9999px;
+
+  /* ============ 7. 间距 · 8pt 网格 ============ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* ============ 8. 字体 ============ */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  --font-mono: 'DIN Alternate', 'Roboto Mono', 'SF Mono', 'Consolas', monospace;
+  --font-display: 'DIN Alternate', 'Oswald', 'Roboto Mono', sans-serif;
+
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+  --font-size-4xl: 48px;
+
+  /* ============ 9. 模糊与滤镜 ============ */
+  --blur-glass: blur(20px);
+  --blur-glass-strong: blur(30px);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-strong: rgba(255, 255, 255, 0.95);
+
+  /* ============ 10. 动效曲线与时长 ============ */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 360ms;
+}
+
+/* ============ Utility classes ============ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+}
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--blur-glass-strong);
+  -webkit-backdrop-filter: var(--blur-glass-strong);
+}
+.card-elevated {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.btn-press:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}

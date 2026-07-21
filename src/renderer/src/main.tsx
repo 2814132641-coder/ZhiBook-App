@@ -3,23 +3,13 @@ import ReactDOM from 'react-dom/client'
 import { ConfigProvider, App as AntdApp } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import App from './App'
+import './styles/tokens.css' // 设计系统 token：CSS 变量
 import './styles/global.css'
+import { theme as themeTokens } from './styles/tokens'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ConfigProvider
-      locale={zhCN}
-      theme={{
-        token: {
-          colorPrimary: '#2E7D5B',
-          colorBgLayout: '#FAFAF7',
-          colorText: '#2C3E50',
-          borderRadius: 8,
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
-        }
-      }}
-    >
+    <ConfigProvider locale={zhCN} theme={{ token: themeTokens }}>
       <AntdApp>
         <App />
       </AntdApp>

@@ -103,7 +103,7 @@ export default function Settings() {
                   <span style={{ fontWeight: 600 }}>
                     <span style={{ marginRight: 6 }}>{root.icon}</span>
                     {root.name}
-                    <span style={{ marginLeft: 8, color: '#95a5a6', fontWeight: 400 }}>
+                    <span style={{ marginLeft: 8, color: 'var(--color-text-secondary)', fontWeight: 400 }}>
                       ({children.length})
                     </span>
                   </span>
@@ -181,10 +181,10 @@ export default function Settings() {
         <p style={{ margin: 0 }}>
           <strong>轻账</strong> · 本地化、轻量、个人记账工具
         </p>
-        <p style={{ margin: '8px 0 0', color: '#7f8c8d' }}>
+        <p style={{ margin: '8px 0 0', color: 'var(--color-text-secondary)' }}>
           数据 100% 存在你的电脑本地，不联网、不上传、不注册。
         </p>
-        <p style={{ margin: '8px 0 0', color: '#7f8c8d' }}>版本 0.1.0</p>
+        <p style={{ margin: '8px 0 0', color: 'var(--color-text-secondary)' }}>版本 0.1.0</p>
       </Card>
 
       <CategoryEditModal
@@ -302,7 +302,7 @@ function CategoryCreateModal({ parentId, onClose, onSaved }: CreateProps) {
   if (parentId === null) return null
 
   const parent = getById(parentId)
-  const defaultColor = parent?.color ?? '#2E7D5B'
+  const defaultColor = parent?.color ?? 'var(--color-brand)'
 
   async function handleSave() {
     if (parentId === null) return

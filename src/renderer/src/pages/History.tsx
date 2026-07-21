@@ -106,7 +106,7 @@ export default function History() {
             loading={loading}
             dataSource={records}
             renderItem={(item) => {
-              const color = item.categoryColor ?? '#95A5A6'
+              const color = item.categoryColor ?? 'var(--color-text-secondary)'
               return (
                 <List.Item
                   key={item.id}
@@ -137,7 +137,7 @@ export default function History() {
                           height: 40,
                           borderRadius: 8,
                           background: color,
-                          color: '#fff',
+                          color: 'var(--color-bg-surface)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -149,17 +149,17 @@ export default function History() {
                     }
                     title={
                       <span>
-                        <span style={{ color: '#7f8c8d', marginRight: 8 }}>
+                        <span style={{ color: 'var(--color-text-secondary)', marginRight: 8 }}>
                           {item.categoryName ?? '未知'}
                         </span>
-                        <span style={{ color: '#2c3e50' }}>{item.note ?? ''}</span>
+                        <span style={{ color: 'var(--color-text-primary)' }}>{item.note ?? ''}</span>
                       </span>
                     }
                     description={formatDateTime(item.occurredAt)}
                   />
                   <div
                     className="amount"
-                    style={{ color: '#E74C3C', fontSize: 18, minWidth: 100, textAlign: 'right' }}
+                    style={{ color: 'var(--color-danger)', fontSize: 18, minWidth: 100, textAlign: 'right' }}
                   >
                     -{formatAmount(item.amount)}
                   </div>

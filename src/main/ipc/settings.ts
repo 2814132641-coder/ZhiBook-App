@@ -4,7 +4,7 @@ import { join } from 'path'
 import dayjs from 'dayjs'
 import { getDb, persist, closeDb } from '../db'
 
-function csvEscape(val: string | number | null | undefined): string {
+export function csvEscape(val: string | number | null | undefined): string {
   if (val === null || val === undefined) return ''
   const s = String(val)
   if (/[",\n]/.test(s)) {
