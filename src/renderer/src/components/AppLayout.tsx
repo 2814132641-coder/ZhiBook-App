@@ -1,5 +1,7 @@
 import { Layout, Menu } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import OfflineBanner from './OfflineBanner'
+import { useConnection } from '../lib/useConnection'
 
 const { Header, Content } = Layout
 
@@ -29,6 +31,8 @@ export default function AppLayout() {
 
   const now = new Date()
   const greet = greeting(now.getHours())
+
+  const { online, checking, retry } = useConnection(5000)
 
   return (
     <Layout style={{ minHeight: '100vh', background: 'var(--color-bg-canvas)' }}>
@@ -94,6 +98,14 @@ export default function AppLayout() {
         />
       </Header>
       <Content style={{ padding: 24, background: 'var(--color-bg-canvas)' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 16px' }}>
+          <OfflineBanner
+            online={online}
+            checking={checking}
+            onRetry={retry}
+            onOpenSettings={() => navigate('/settings')}
+          />
+        </div>
         <Outlet />
       </Content>
     </Layout>
