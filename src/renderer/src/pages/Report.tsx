@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
-import { App, Card, Col, DatePicker, Empty, Row, Statistic } from 'antd'
+import { App, Card, Col, DatePicker, Empty, Row, Statistic, Button } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import ReactECharts from 'echarts-for-react'
 import { formatAmount } from '../utils/format'
 import type { MonthlySummary } from '../../../shared/api/index'
 import { api } from '../lib/api';
+import { useConnection } from '../lib/useConnection'
+import { useNavigate } from 'react-router-dom'
 
 export default function Report() {
   const { message } = App.useApp()
+  const { online, checking, retry } = useConnection()
+  const navigate = useNavigate()
+
   const [month, setMonth] = useState<Dayjs>(dayjs())
   const [summary, setSummary] = useState<MonthlySummary | null>(null)
   const [loading, setLoading] = useState(false)
@@ -130,6 +135,17 @@ export default function Report() {
       <Card title="分类饼图" loading={loading} style={{ marginBottom: 16 }}>
         {summary && summary.byCategory.length > 0 ? (
           <ReactECharts option={pieOption} style={{ height: 360 }} />
+        ) : online === false ? (
+          <div style={{ textAlign: 'center', padding: 48 }}>
+            <div style={{ fontSize: 20, marginBottom: 12 }}>无法连接到后端</div>
+            <div style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>
+              检测到后端服务不可用，无法生成报表。你可以重试或前往设置查看帮助。
+            </div>
+            <Button type="primary" loading={checking} onClick={retry} style={{ marginRight: 8 }}>
+              重试
+            </Button>
+            <Button onClick={() => navigate('/settings')}>打开设置</Button>
+          </div>
         ) : (
           <Empty description="本月暂无数据" />
         )}
@@ -138,6 +154,17 @@ export default function Report() {
       <Card title="分类排行 Top 5" loading={loading}>
         {summary && summary.byCategory.length > 0 ? (
           <ReactECharts option={barOption} style={{ height: 280 }} />
+        ) : online === false ? (
+          <div style={{ textAlign: 'center', padding: 48 }}>
+            <div style={{ fontSize: 20, marginBottom: 12 }}>无法连接到后端</div>
+            <div style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>
+              检测到后端服务不可用，无法生成报表。你可以重试或前往设置查看帮助。
+            </div>
+            <Button type="primary" loading={checking} onClick={retry} style={{ marginRight: 8 }}>
+              重试
+            </Button>
+            <Button onClick={() => navigate('/settings')}>打开设置</Button>
+          </div>
         ) : (
           <Empty description="本月暂无数据" />
         )}
