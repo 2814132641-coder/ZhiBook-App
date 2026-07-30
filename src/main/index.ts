@@ -1,16 +1,23 @@
 import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { spawn } from 'child_process'
-import { writeFileSync, appendFileSync } from 'fs'
+import { writeFileSync } from 'fs'
 import { log } from './log'
 
+const DEBUG = process.env.LIGHT_LEDGER_DEBUG === '1' || process.env.NODE_ENV !== 'production'
+
 function dbg(msg: string): void {
+  if (!DEBUG) return
   try {
-    writeFileSync('D:\\__dbg.log', `[${new Date().toISOString()}] ${msg}\n`, { flag: 'a' })
+    // Prefer userData when available, otherwise fallback to CWD
+    const base = app && app.isReady() ? app.getPath('userData') : process.cwd()
+    const p = join(base, '__dbg.log')
+    writeFileSync(p, `[${new Date().toISOString()}] ${msg}\n`, { flag: 'a' })
   } catch {}
 }
 
-dbg('=== module top ===')
+// remove noisy startup dbg when not in debug mode
+if (DEBUG) dbg('=== module top ===')
 
 const isDev = !app.isPackaged
 
@@ -38,15 +45,34 @@ async function isServerRunning(): Promise<boolean> {
 }
 
 /** 提示用户启动 server（如果未运行） */
-function showServerHint(): void {
+function showServerHint(): number {
   const { dialog } = require('electron')
-  dialog.showMessageBoxSync({
+  const res = dialog.showMessageBoxSync({
     type: 'info',
-    title: '需要后端服务',
-    message: '请先启动后端服务',
-    detail: '请在另一个终端运行：\n\ncd d:/记账App\nnode src/server/dist/index.js\n\n然后重新打开本应用。',
-    buttons: ['知道了']
+    title: '后端服务未运行',
+    message: '未检测到本地后端服务 (http://127.0.0.1:5210).',
+    detail:
+      '你可以：\n\n1) 运行开发服务（开发时）: 在项目根目录运行 `npm run server:dev`。\n2) 打开应用的设置页面查看帮助或选择继续（可能功能受限）。',
+    buttons: ['尝试启动（仅开发）', '继续（离线/只读）', '退出']
   })
+  return res
+}
+
+async function trySpawnDevServer(): Promise<boolean> {
+  try {
+    // Spawn the development server (works when Node & npm available and app run from project dir)
+    serverProcess = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'server:dev'], {
+      cwd: process.cwd(),
+      shell: false,
+      detached: false,
+      stdio: 'ignore'
+    })
+    log('spawned dev server process')
+    return true
+  } catch (e) {
+    log('failed to spawn dev server: ' + String(e))
+    return false
+  }
 }
 
 function createWindow(): void {
@@ -104,10 +130,11 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  // 早期调试：写文件确认主进程到了这里
-  try {
-    require('fs').writeFileSync('D:\\__app_ready.txt', 'app.whenReady fired at ' + new Date().toISOString() + '\n')
-  } catch {}
+  if (DEBUG) {
+    try {
+      writeFileSync(join(app.getPath('userData'), '__app_ready.txt'), 'app.whenReady fired at ' + new Date().toISOString() + '\n', { flag: 'a' })
+    } catch {}
+  }
 
   log('app ready')
   app.setAppUserModelId('com.lightledger.app')
@@ -115,25 +142,46 @@ app.whenReady().then(async () => {
   // 检查后端服务是否已在运行
   const running = await isServerRunning()
   log(`server running: ${running}`)
-  try {
-    require('fs').appendFileSync('D:\\__app_ready.txt', 'server running: ' + running + '\n')
-  } catch {}
   if (!running) {
     log('server not running, showing hint')
-    showServerHint()
-    app.quit()
-    return
+    const choice = showServerHint()
+    if (choice === 0) {
+      const ok = await trySpawnDevServer()
+      if (!ok) {
+        const { dialog } = require('electron')
+        dialog.showMessageBoxSync({
+          type: 'error',
+          title: '启动失败',
+          message: '尝试启动开发服务失败，请手动在项目目录运行 `npm run server:dev`。'
+        })
+        app.quit()
+        return
+      }
+      // give the server a moment to start
+      const started = await (async () => {
+        for (let i = 0; i < 10; i++) {
+          // small delay
+          // eslint-disable-next-line no-await-in-loop
+          await new Promise((r) => setTimeout(r, 500))
+          if (await isServerRunning()) return true
+        }
+        return false
+      })()
+      if (!started) {
+        log('server did not start in time, proceeding to create window (may be limited)')
+      }
+    } else if (choice === 1) {
+      log('user chose to continue in offline/limited mode')
+      // proceed to create window; renderer should handle degraded mode
+    } else {
+      app.quit()
+      return
+    }
   }
 
-  try {
-    require('fs').appendFileSync('D:\\__app_ready.txt', 'about to createWindow\n')
-  } catch {}
   log('calling createWindow')
   createWindow()
   log('window created')
-  try {
-    require('fs').appendFileSync('D:\\__app_ready.txt', 'window created\n')
-  } catch {}
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -142,7 +190,9 @@ app.whenReady().then(async () => {
 
 app.on('window-all-closed', () => {
   if (serverProcess) {
-    serverProcess.kill()
+    try {
+      serverProcess.kill()
+    } catch {}
     serverProcess = null
   }
   if (process.platform !== 'darwin') app.quit()
@@ -150,7 +200,9 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => {
   if (serverProcess) {
-    serverProcess.kill()
+    try {
+      serverProcess.kill()
+    } catch {}
     serverProcess = null
   }
 })
