@@ -19,11 +19,16 @@ import { formatAmount, formatDateTime } from '../utils/format'
 import type { RecordItem } from '../../../shared/api/index'
 import EditRecordModal from '../components/EditRecordModal'
 import { api } from '../lib/api';
+import { useConnection } from '../lib/useConnection'
+import { useNavigate } from 'react-router-dom'
 
 export default function History() {
   const { message } = App.useApp()
   const list = useCategories((s) => s.list)
   const loadCategories = useCategories((s) => s.load)
+
+  const navigate = useNavigate()
+  const { online, checking, retry } = useConnection()
 
   const [scope, setScope] = useState<'month' | 'all'>('month')
   const [month, setMonth] = useState<Dayjs>(dayjs())
@@ -101,7 +106,20 @@ export default function History() {
         </Space>
 
         {records.length === 0 && !loading ? (
-          <Empty description="暂无记录" />
+          online === false ? (
+            <div style={{ textAlign: 'center', padding: 48 }}>
+              <div style={{ fontSize: 20, marginBottom: 12 }}>无法连接到后端</div>
+              <div style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>
+                检测到后端服务不可用，历史记录加载失败。你可以重试或前往设置查看帮助。
+              </div>
+              <Button type="primary" loading={checking} onClick={retry} style={{ marginRight: 8 }}>
+                重试
+              </Button>
+              <Button onClick={() => navigate('/settings')}>打开设置</Button>
+            </div>
+          ) : (
+            <Empty description="暂无记录" />
+          )
         ) : (
           <List
             loading={loading}
